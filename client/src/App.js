@@ -1,18 +1,39 @@
-import "./App.css"
+import "./App.css";
 
 function App() {
+  const [name, setName] = useState("");
+  const [datetime, setDatetime] = useState("");
+  const [desc, setDesc] = useState("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <main>
       <h1>
         $400<span>.00</span>
       </h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="basic">
-          <input type="text" placeholder={"new tv"} />
-          <input type="datetime-local" />
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={"new tv"}
+          />
+          <input
+            type="datetime-local"
+            value={datetime}
+            onChange={(e) => setDatetime(e.target.value)}
+          />
         </div>
         <div>
-          <input type="text" placeholder={"description"} />
+          <input
+            type="text"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+            placeholder={"description"}
+          />
         </div>
         <button type="submit">Add new transaction</button>
       </form>
