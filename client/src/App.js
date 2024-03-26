@@ -1,4 +1,5 @@
 import "./App.css";
+import { useState } from "react";
 
 function App() {
   const [name, setName] = useState("");
@@ -6,6 +7,25 @@ function App() {
   const [desc, setDesc] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const price = name.split(" ")[0];
+    const url = process.env.REACT_APP_API_URL + "transaction";
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        name: name.substring(price.length + 1),
+        datetime,
+        desc,
+        price,
+      }),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        setDatetime("");
+        setDesc("");
+        setName("");
+      });
   };
 
   return (
@@ -19,7 +39,7 @@ function App() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder={"new tv"}
+            placeholder={"product"}
           />
           <input
             type="datetime-local"
