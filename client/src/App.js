@@ -1,32 +1,43 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
   const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
   const [datetime, setDatetime] = useState("");
   const [desc, setDesc] = useState("");
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const [transactions, setTransactions] = useState({});
 
-    const price = name.split(" ")[0];
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const url = process.env.REACT_APP_API_URL + "transaction";
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({
-        name: name.substring(price.length + 1),
-        datetime,
-        desc,
-        price,
-      }),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        setDatetime("");
-        setDesc("");
-        setName("");
-      });
+    const response = await axios.post(url, {
+      name: name,
+      desc: desc,
+      datetime: datetime,
+      price: price,
+    });
+    setDatetime("");
+    setDesc("");
+    setName("");
+    getTransactions();
   };
+
+  const getTransactions = async () => {
+    try {
+      const url = process.env.REACT_APP_API_URL + "transactions";
+      const response = await axios.get(url);
+      setTransactions(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+    }
+  };
+
+  useEffect(() => {
+    getTransactions();
+  }, []);
 
   return (
     <main>
@@ -40,6 +51,12 @@ function App() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder={"product"}
+          />
+          <input
+            type="text"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder={"price"}
           />
           <input
             type="datetime-local"
@@ -57,37 +74,23 @@ function App() {
         </div>
         <button type="submit">Add new transaction</button>
       </form>
+
       <div className="transactions">
-        <div className="transaction">
-          <div className="left">
-            <div className="name">New Samsung TV</div>
-            <div className="description">it was time for new tv</div>
-          </div>
-          <div className="right">
-            <div className="price"> $500</div>
-            <div className="datetime">2022-12-18</div>
-          </div>
-        </div>
-        <div className="transaction">
-          <div className="left">
-            <div className="name">website</div>
-            <div className="description">it was time for new website</div>
-          </div>
-          <div className="right">
-            <div className="price"> $500</div>
-            <div className="datetime">2022-12-18</div>
-          </div>
-        </div>
-        <div className="transaction">
-          <div className="left">
-            <div className="name">Iphone </div>
-            <div className="description">it was time for new iphone</div>
-          </div>
-          <div className="right">
-            <div className="price"> -$900</div>
-            <div className="datetime">2022-12-18</div>
-          </div>
-        </div>
+        {transactions.length > 0 &&
+          transactions.map((item) => (
+            <div className="transaction">
+              <div className="left">
+                <div className="name">{item.name}</div>
+                <div className="description">{item.desc}</div>
+              </div>
+              <div className="right">
+                <div className={"price" + (item.price < 0 ? "red" : "green")}>
+                  {item.price}
+                </div>
+                <div className="datetime">{item.datetime}</div>
+              </div>
+            </div>
+          ))}
       </div>
     </main>
   );
