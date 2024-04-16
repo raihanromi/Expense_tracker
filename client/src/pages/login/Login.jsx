@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import "./login.css";
 
 const Login = () => {
   return (
@@ -22,10 +24,10 @@ const Login = () => {
               placeholder="Enter Password"
               className="registerInput"
             />
-            <button className="registerBtn">Create new account</button>
             <button type="submit" className="registerBtn">
               Submit
             </button>
+            <Link to="/register">Create new account</Link>
           </form>
         </div>
       </div>

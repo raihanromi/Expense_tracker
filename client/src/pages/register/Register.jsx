@@ -1,5 +1,6 @@
 import React from "react";
 import "./register.css";
+
 const Register = () => {
   return (
     <div className="register">
@@ -12,14 +13,24 @@ const Register = () => {
         </div>
         <div className="registerRight">
           <form className="registerBox">
-            <input type="text" placeholder="Name" className="registerInput" />
-            <input type="text" placeholder="Email" className="registerInput" />
+            <input
+              type="text"
+              placeholder="Enter Name"
+              className="registerInput"
+            />
+            <input
+              type="text"
+              placeholder="Enter Email"
+              className="registerInput"
+            />
             <input
               type="password"
               placeholder="Enter Password"
               className="registerInput"
             />
-            <button type="submit" className="registerBtn">Submit</button>
+            <button type="submit" className="registerBtn">
+              Submit
+            </button>
           </form>
         </div>
       </div>
